@@ -1,16 +1,9 @@
-from typing import Optional
-
 from fastapi import FastAPI
-from pydantic import BaseModel
+
+import schemas
+
 
 app = FastAPI()
-
-
-class Hero(BaseModel):
-    name: Optional[str]
-    wry_name: str
-    role: str
-    description: str
 
 
 @app.get('/heroes')
@@ -24,7 +17,7 @@ def get_hero_by_name(name: str) -> dict:
 
 
 @app.post('/heroes/addhero')
-def add_hero(request: Hero) -> dict:
+def add_hero(request: schemas.Hero) -> dict:
     return {'data': f'Successfully create a hero {request}'}
 
 
