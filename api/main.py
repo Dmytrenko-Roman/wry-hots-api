@@ -1,9 +1,12 @@
 from fastapi import FastAPI
 
-import schemas
+from database import engine
+import schemas, models
 
 
 app = FastAPI()
+
+models.Base.metadata.create_all(engine)
 
 
 @app.get('/heroes')
