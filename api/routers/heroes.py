@@ -4,10 +4,8 @@ from sqlalchemy.orm import Session
 from database import get_db
 import schemas, models
 
-router = APIRouter(
-    prefix='/heroes',
-    tags=['heroes']
-)
+router = APIRouter(prefix="/heroes", tags=["heroes"])
+
 
 @router.get("/", status_code=status.HTTP_200_OK)
 def get_heroes(db: Session = Depends(get_db)) -> dict:
@@ -21,7 +19,9 @@ def get_heroes(db: Session = Depends(get_db)) -> dict:
     return heroes
 
 
-@router.get("/{name}", status_code=status.HTTP_200_OK, response_model=schemas.HeroResponse)
+@router.get(
+    "/{name}", status_code=status.HTTP_200_OK, response_model=schemas.HeroResponse
+)
 def get_hero_by_name(name: str, db: Session = Depends(get_db)) -> dict:
     hero = db.query(models.Hero).filter(models.Hero.name == name).first()
 
@@ -34,7 +34,9 @@ def get_hero_by_name(name: str, db: Session = Depends(get_db)) -> dict:
     return hero
 
 
-@router.post("/addhero", status_code=status.HTTP_201_CREATED, response_model=schemas.HeroResponse)
+@router.post(
+    "/addhero", status_code=status.HTTP_201_CREATED, response_model=schemas.HeroResponse
+)
 def add_hero(request: schemas.HeroBase, db: Session = Depends(get_db)) -> dict:
     new_hero = models.Hero(
         name=request.name,

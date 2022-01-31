@@ -35,6 +35,6 @@ class HeroResponse(BaseModel):
     role: str
     description: str
     creator: UserResponse
-    
+
     class Config:
         orm_mode = True
