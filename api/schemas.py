@@ -1,25 +1,40 @@
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel
 
 
-class Hero(BaseModel):
+class UserBase(BaseModel):
+    name: str
+    email: str
+    password: str
+
+
+class HeroBase(BaseModel):
     name: Optional[str]
     wry_name: str
     role: str
     description: str
 
 
-class GetHero(BaseModel):
-    wry_name: str
-    role: str
-    description: str
-    
+class Hero(HeroBase):
     class Config:
         orm_mode = True
 
 
-class User(BaseModel):
+class UserResponse(BaseModel):
     name: str
     email: str
-    password: str
+    heroes: List[Hero] = []
+
+    class Config:
+        orm_mode = True
+
+
+class HeroResponse(BaseModel):
+    wry_name: str
+    role: str
+    description: str
+    creator: UserResponse
+    
+    class Config:
+        orm_mode = True
