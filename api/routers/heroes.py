@@ -4,9 +4,12 @@ from sqlalchemy.orm import Session
 from database import get_db
 import schemas, models
 
-router = APIRouter()
+router = APIRouter(
+    prefix='/heroes',
+    tags=['heroes']
+)
 
-@router.get("/heroes", status_code=status.HTTP_200_OK)
+@router.get("/", status_code=status.HTTP_200_OK)
 def get_heroes(db: Session = Depends(get_db)) -> dict:
     heroes = db.query(models.Hero).all()
 
@@ -18,7 +21,7 @@ def get_heroes(db: Session = Depends(get_db)) -> dict:
     return heroes
 
 
-@router.get("/heroes/{name}", status_code=status.HTTP_200_OK, response_model=schemas.HeroResponse)
+@router.get("/{name}", status_code=status.HTTP_200_OK, response_model=schemas.HeroResponse)
 def get_hero_by_name(name: str, db: Session = Depends(get_db)) -> dict:
     hero = db.query(models.Hero).filter(models.Hero.name == name).first()
 
@@ -31,7 +34,7 @@ def get_hero_by_name(name: str, db: Session = Depends(get_db)) -> dict:
     return hero
 
 
-@router.post("/heroes/addhero", status_code=status.HTTP_201_CREATED, response_model=schemas.HeroResponse)
+@router.post("/addhero", status_code=status.HTTP_201_CREATED, response_model=schemas.HeroResponse)
 def add_hero(request: schemas.HeroBase, db: Session = Depends(get_db)) -> dict:
     new_hero = models.Hero(
         name=request.name,
@@ -47,7 +50,7 @@ def add_hero(request: schemas.HeroBase, db: Session = Depends(get_db)) -> dict:
     return new_hero
 
 
-@router.put("/heroes/{name}", status_code=status.HTTP_202_ACCEPTED)
+@router.put("/{name}", status_code=status.HTTP_202_ACCEPTED)
 def update_hero(
     name: str, request: schemas.HeroBase, db: Session = Depends(get_db)
 ) -> dict:
@@ -73,7 +76,7 @@ def update_hero(
     return {"data": f"Hero with name {name} was updated"}
 
 
-@router.delete("/heroes/{name}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{name}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_hero(name: str, db: Session = Depends(get_db)) -> dict:
     hero = db.query(models.Hero).filter(models.Hero.name == name)
 
