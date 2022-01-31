@@ -8,3 +8,12 @@ class Hero(BaseModel):
     wry_name: str
     role: str
     description: str
+
+
+class GetHero(BaseModel):
+    wry_name: str
+    role: str
+    description: str
+    
+    class Config:
+        orm_mode = True

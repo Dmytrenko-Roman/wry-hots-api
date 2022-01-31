@@ -4,7 +4,7 @@ from database import Base
 
 
 class Hero(Base):
-    __tablename__ = 'heroes'
+    __tablename__ = "heroes"
 
     name = Column(String, primary_key=True)
     wry_name = Column(String)
