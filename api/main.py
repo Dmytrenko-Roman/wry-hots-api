@@ -99,3 +99,19 @@ def delete_hero(name: str, db: Session = Depends(get_db)) -> dict:
     db.commit()
 
     return Response(status_code=status.HTTP_404_NOT_FOUND)
+
+
+@app.post('/users', status_code=status.HTTP_201_CREATED)
+def create_user(request: schemas.User, db: Session = Depends(get_db)) -> dict:
+    new_user = models.User(**request.dict())
+
+    try:
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+    except BaseException:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f'user with email {request.email} is already exists.')
+    
+    return new_user
