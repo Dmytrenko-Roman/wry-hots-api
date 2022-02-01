@@ -12,3 +12,15 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+class Token(BaseSettings):
+    secret_key: str
+    algorithm: str
+    access_token_expire_minutes: int
+
+    class Config:
+        env_file = "../.env"
+
+
+token = Token()
