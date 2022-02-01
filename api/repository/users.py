@@ -1,7 +1,8 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-import models, schemas, hashing
+from hashing import Hash
+import models, schemas
 
 
 def get_by_id(id: int, db: Session) -> dict:
@@ -19,7 +20,7 @@ def get_by_id(id: int, db: Session) -> dict:
 def create(request: schemas.UserBase, db: Session) -> dict:
     new_user = models.User(**request.dict())
 
-    hashed_pwd = hashing.hash(new_user.password)
+    hashed_pwd = Hash.hash(new_user.password)
     new_user.password = hashed_pwd
 
     try:
