@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from database import get_db
 from hashing import Hash
-import schemas, models, hashing
+import schemas, models
 
 
 router = APIRouter(
@@ -18,7 +18,7 @@ def login(request: schemas.Login, db: Session = Depends(get_db)) -> dict:
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ivalid Credentials")
 
-    if not hashing.verify(user.password, request.password):
+    if not Hash.verify(request.password, user.password):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Incorrect password")
 
     return user
