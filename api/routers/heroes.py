@@ -10,7 +10,10 @@ router = APIRouter(prefix="/heroes", tags=["heroes"])
 
 
 @router.get("/", status_code=status.HTTP_200_OK)
-def get_heroes(db: Session = Depends(get_db), get_current_user: schemas.UserBase = Depends(get_current_user)) -> dict:
+def get_heroes(
+    db: Session = Depends(get_db),
+    get_current_user: schemas.UserBase = Depends(get_current_user),
+) -> dict:
     return heroes.get_all(db)
 
 
