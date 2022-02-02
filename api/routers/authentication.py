@@ -1,16 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from database import get_db
 from hashing import Hash
-import schemas, models
+import schemas, models, oauth2
 
 
 router = APIRouter(tags=["authentication"])
 
 
 @router.post("/login")
-def login(request: schemas.Login, db: Session = Depends(get_db)) -> dict:
+def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)) -> dict:
     user = db.query(models.User).filter(models.User.email == request.username).first()
 
     if not user:
@@ -23,4 +24,8 @@ def login(request: schemas.Login, db: Session = Depends(get_db)) -> dict:
             status_code=status.HTTP_404_NOT_FOUND, detail="Incorrect password"
         )
 
-    return user
+    access_token = oauth2.create_access_token(
+        data={"sub": user.email}
+    )
+
+    return {"access_token": access_token, "token_type": "bearer"}

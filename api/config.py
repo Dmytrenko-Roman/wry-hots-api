@@ -1,7 +1,7 @@
 from pydantic import BaseSettings
 
 
-class Settings(BaseSettings):
+class DatabaseSettings(BaseSettings):
     database_hostname: str
     database_username: str
     database_password: str
@@ -11,10 +11,10 @@ class Settings(BaseSettings):
         env_file = "../.env"
 
 
-settings = Settings()
+database_settings = DatabaseSettings()
 
 
-class Token(BaseSettings):
+class TokenSettings(BaseSettings):
     secret_key: str
     algorithm: str
     access_token_expire_minutes: int
@@ -23,4 +23,4 @@ class Token(BaseSettings):
         env_file = "../.env"
 
 
-token = Token()
+token_settings = TokenSettings()
