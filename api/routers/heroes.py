@@ -12,7 +12,6 @@ router = APIRouter(prefix="/heroes", tags=["heroes"])
 @router.get("/", status_code=status.HTTP_200_OK)
 def get_heroes(
     db: Session = Depends(get_db),
-    get_current_user: schemas.UserBase = Depends(get_current_user),
 ) -> dict:
     return heroes.get_all(db)
 
@@ -25,10 +24,10 @@ def get_hero_by_name(name: str, db: Session = Depends(get_db)) -> dict:
 
 
 @router.post(
-    "/addhero", status_code=status.HTTP_201_CREATED, response_model=schemas.HeroResponse
+    "/addhero", status_code=status.HTTP_201_CREATED, response_model=schemas.HeroResponse, 
 )
-def add_hero(request: schemas.HeroBase, db: Session = Depends(get_db)) -> dict:
-    return heroes.add(request, db)
+def add_hero(request: schemas.HeroBase, db: Session = Depends(get_db), current_user: schemas.UserBase = Depends(get_current_user)) -> dict:
+    return heroes.add(request, db, current_user)
 
 
 @router.put("/{name}", status_code=status.HTTP_202_ACCEPTED)

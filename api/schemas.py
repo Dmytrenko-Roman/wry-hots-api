@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -24,7 +24,6 @@ class Hero(HeroBase):
 class UserResponse(BaseModel):
     name: str
     email: str
-    heroes: List[Hero] = []
 
     class Config:
         orm_mode = True
@@ -51,4 +50,4 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    username: Optional[str] = None
+    id: Optional[str] = None

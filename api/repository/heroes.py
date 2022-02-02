@@ -27,12 +27,13 @@ def get_by_name(name: str, db: Session) -> dict:
     return hero
 
 
-def add(request: schemas.HeroBase, db: Session) -> dict:
+def add(request: schemas.HeroBase, db: Session, current_user: models.User) -> dict:
     new_hero = models.Hero(
         name=request.name,
         wry_name=request.wry_name,
         role=request.role,
         description=request.description,
+        user_id=current_user.id
     )
 
     db.add(new_hero)
